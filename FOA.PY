@@ -66,11 +66,11 @@ def fitness_function(sensor_nodes):
     matrix_c = np.zeros((VarMaxx+1, VarMaxy+1), dtype=int)  
     grid_x, grid_y = np.meshgrid(np.arange(VarMaxx+1), np.arange(VarMaxy+1), indexing='ij')
     for sensor in sensor_nodes:
-        sensor_x, sensor_y = sensor
+        sensor_y, sensor_x = sensor
         distances = (grid_x - sensor_x) ** 2 + (grid_y - sensor_y) ** 2
         matrix_c[distances <= Rss] = 1
     for i in ban_position:
-        matrix_c[i[0],i[1]] = 0 
+        matrix_c[i[1],i[0]] = 0 
     coverage_ratio = round(np.sum(matrix_c) / M, 4)
     return coverage_ratio
 
@@ -108,7 +108,7 @@ def foa_algorithm():
         
         for i in range(0, fruitfly):
             
-            k = np.random.randint(1, nPop - 1)
+            k = np.random.randint(1, nPop)
             solution = np.copy(population)
             solution[k][0] = solution[k][0] + (2*step*np.random.rand() - step)
             solution[k][1] = solution[k][1] + (2*step*np.random.rand()- step)
