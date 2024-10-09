@@ -173,7 +173,7 @@ def plot_sensor(sensor_nodes, fitness):
     ay.grid(True, linewidth=0.5)
     ay.invert_yaxis()
 
-    # Hình 1: Vẽ các điểm trong chèn nền
+    # Hình 1: Vẽ các điểm xong và chèn nền
 
     for i, node in enumerate(sensor_nodes):
         draw_circle(ax,node,Rs,small_radius)
