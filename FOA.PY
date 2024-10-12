@@ -2,6 +2,8 @@ import numpy as np
 from matplotlib import pyplot as plt
 from PIL import Image
 import math
+import csv 
+
 VarMaxx = 100
 VarMaxy = 100
 Rc = 10
@@ -10,11 +12,14 @@ nPop = 60
 MaxIt = 2000
 fruitfly = 60
 
-image = Image.open('C1.png')
+image = Image.open('C1_v2.png')
 image_resized = image.resize((VarMaxx+1, VarMaxy+1))
 image_L = image_resized.convert('L')
 Area1 = np.zeros((VarMaxx+1,VarMaxy+1))
 image_matrix = np.array(image_L)
+
+image_1 =  Image.open('C1_real.png')
+
 for i in range(VarMaxx+1):
     for j in range(VarMaxy+1):
         if image_matrix[i,j]  > 1:
@@ -177,7 +182,7 @@ def plot_sensor(sensor_nodes, fitness):
 
     for i, node in enumerate(sensor_nodes):
         draw_circle(ax,node,Rs,small_radius)
-    ax.imshow(image_matrix, cmap='gray', extent=[0, VarMaxx, VarMaxy, 0])
+    ax.imshow(image_1, extent=[0, VarMaxx, VarMaxy, 0])
     
     # Hình 2: Vẽ các điểm và Vẽ lại các vật cản
 
@@ -190,8 +195,16 @@ def plot_sensor(sensor_nodes, fitness):
     caculator = round((len(ban_position)/((VarMaxy+1)*(VarMaxx+1))),4)
     ax.set_title(f"Coverage percent:{round(fitness/(1-caculator),4) * 100}%")
     ay.set_title(f"Coverage percent:{round(fitness/(1-caculator),4) * 100}%")
+    plt.subplots_adjust(wspace=0.5)
+    plt.savefig('graph.pdf')
     plt.show()
     
 best_solution, best_fitness = foa_algorithm()
+
+with open('FOA.CSV', mode ='w', newline='') as file:
+    csv_writer = csv.writer(file)
+    csv_writer.writerow([best_fitness])
+    csv_writer.writerows(best_solution)
+
 plot_sensor(best_solution, best_fitness)
 
