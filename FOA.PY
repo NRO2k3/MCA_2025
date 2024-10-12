@@ -193,8 +193,8 @@ def plot_sensor(sensor_nodes, fitness):
 
     plt.grid(True)
     caculator = round((len(ban_position)/((VarMaxy+1)*(VarMaxx+1))),4)
-    ax.set_title(f"Coverage percent:{round(fitness/(1-caculator),4) * 100}%")
-    ay.set_title(f"Coverage percent:{round(fitness/(1-caculator),4) * 100}%")
+    ax.set_title(f"Coverage percent:{round(fitness/(1-caculator),4) * 100 :.2f} %")
+    ay.set_title(f"Coverage percent:{round(fitness/(1-caculator),4) * 100 :.2f} %")
     plt.subplots_adjust(wspace=0.5)
     plt.savefig('graph.pdf')
     plt.show()
