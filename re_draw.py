@@ -78,6 +78,7 @@ def plot_sensor(sensor_nodes, fitness):
     caculator = len(ban_position)/((VarMaxy+1)*(VarMaxx+1))
     ax.set_title(f"Coverage percent:{round(fitness/(1-caculator),4) * 100 :.2f} %")
     ay.set_title(f"Coverage percent:{round(fitness/(1-caculator),4) * 100 :.2f} %")
+    plt.savefig('graph.pdf', format='pdf', dpi=300)
     plt.show()
 
 with open('FOA.CSV', mode ='r', newline='') as file:

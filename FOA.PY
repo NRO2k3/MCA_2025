@@ -10,7 +10,7 @@ Rc = 10
 Rs = 10
 nPop = 60
 MaxIt = 2000
-fruitfly = 60
+fruitfly = 50
 
 image = Image.open('C1_v2.png')
 image_resized = image.resize((VarMaxx+1, VarMaxy+1))
@@ -196,7 +196,7 @@ def plot_sensor(sensor_nodes, fitness):
     ax.set_title(f"Coverage percent:{round(fitness/(1-caculator),4) * 100 :.2f} %")
     ay.set_title(f"Coverage percent:{round(fitness/(1-caculator),4) * 100 :.2f} %")
     plt.subplots_adjust(wspace=0.5)
-    plt.savefig('graph.pdf')
+    plt.savefig('graph.pdf', format='pdf', dpi=300)
     plt.show()
     
 best_solution, best_fitness = foa_algorithm()
