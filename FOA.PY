@@ -2,15 +2,15 @@ import numpy as np
 from matplotlib import pyplot as plt
 from PIL import Image
 import math
-import csv 
+import csv
 
 VarMaxx = 100
 VarMaxy = 100
 Rc = 10
 Rs = 10
-nPop = 60
+N = 60
 MaxIt = 2000
-fruitfly = 50
+nPop = 50
 
 image = Image.open('C1_v2.png')
 image_resized = image.resize((VarMaxx+1, VarMaxy+1))
@@ -34,7 +34,7 @@ def initialize_population():
     sink_node = (VarMaxx/2, VarMaxy/2)
     initPop = []
     initPop.append(sink_node)
-    for i in range(1, nPop):
+    for i in range(1, N):
         check = True
         while check:
             xp, yp = initPop[np.random.randint(0,i)]
@@ -106,17 +106,18 @@ def check_connectivity(sensor_nodes):
     return False
 
 def foa_algorithm():
-    population = initialize_population()
-    best_fitness = fitness_function(population)
-    step = 20
+    population = [initialize_population() for i in range(nPop)]
+    index_fitness = [fitness_function(population[i]) for i in range(nPop)]
+    best_fitness = max(index_fitness)
+    step = 30
     for iteration in range(MaxIt):
         
-        for i in range(0, fruitfly):
+        for i in range(0, nPop):
             
-            k = np.random.randint(1, nPop)
-            solution = np.copy(population)
+            k = np.random.randint(1, N)
+            solution = np.copy(population[i])
             solution[k][0] = solution[k][0] + (2*step*np.random.rand() - step)
-            solution[k][1] = solution[k][1] + (2*step*np.random.rand()- step)
+            solution[k][1] = solution[k][1] + (2*step*np.random.rand() - step)
             solution[k][0] = np.clip(solution[k][0], 0, VarMaxx)
             solution[k][1] = np.clip(solution[k][1], 0, VarMaxy)
             xi = int(solution[k][0])
@@ -134,14 +135,17 @@ def foa_algorithm():
                 and Area1[yi,xi_t] == 255
                 and Area1[yi_c,xi] == 255
                 and Area1[yi_t,xi] == 255):
-                new_fitness = fitness_function(solution)
-                if check_connectivity(solution) and new_fitness > best_fitness:
-                    best_fitness = new_fitness
-                    population[k] = solution[k]
-
+                
+                if check_connectivity(solution):
+                    new_fitness = fitness_function(solution)  
+                    if new_fitness > best_fitness:
+                
+                        best_fitness = new_fitness
+                        population[:]= [solution]*nPop
+                        best_solution = solution
+                
         print(f"Iteration {iteration}: {best_fitness}")
-
-    return population, best_fitness
+    return best_solution, best_fitness
 
 small_radius=1
 
@@ -160,7 +164,6 @@ def draw_circle(ax, center, radius, small_radius):
     
 def plot_sensor(sensor_nodes, fitness):
     
-
     fig, (ax,ay) = plt.subplots(1,2)
     ax.set_xlim(0, VarMaxx)
     ax.set_ylim(0, VarMaxy)
@@ -178,7 +181,7 @@ def plot_sensor(sensor_nodes, fitness):
     ay.grid(True, linewidth=0.5)
     ay.invert_yaxis()
 
-    # Hình 1: Vẽ các điểm xong và chèn nền
+    # Hình 1: Vẽ các điểm trong chèn nền
 
     for i, node in enumerate(sensor_nodes):
         draw_circle(ax,node,Rs,small_radius)
@@ -195,16 +198,17 @@ def plot_sensor(sensor_nodes, fitness):
     caculator = round((len(ban_position)/((VarMaxy+1)*(VarMaxx+1))),4)
     ax.set_title(f"Coverage percent:{round(fitness/(1-caculator),4) * 100 :.2f} %")
     ay.set_title(f"Coverage percent:{round(fitness/(1-caculator),4) * 100 :.2f} %")
-    plt.subplots_adjust(wspace=0.5)
     plt.savefig('graph.pdf', format='pdf', dpi=300)
     plt.show()
     
 best_solution, best_fitness = foa_algorithm()
 
-with open('FOA.CSV', mode ='w', newline='') as file:
+with open('FOA_1.csv', mode ='w', newline='') as file:
     csv_writer = csv.writer(file)
     csv_writer.writerow([best_fitness])
     csv_writer.writerows(best_solution)
 
 plot_sensor(best_solution, best_fitness)
+
+
 
