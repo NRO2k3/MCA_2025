@@ -109,6 +109,7 @@ def foa_algorithm():
     population = [initialize_population() for i in range(nPop)]
     index_fitness = [fitness_function(population[i]) for i in range(nPop)]
     best_fitness = max(index_fitness)
+    best_solution = population[index_fitness.index(best_fitness)]
     step = 30
     for iteration in range(MaxIt):
         
@@ -138,12 +139,15 @@ def foa_algorithm():
                 
                 if check_connectivity(solution):
                     new_fitness = fitness_function(solution)  
-                    if new_fitness > best_fitness:
-                
-                        best_fitness = new_fitness
-                        population[:]= [solution]*nPop
-                        best_solution = solution
-                
+                    if new_fitness > index_fitness[i]:
+                        index_fitness[i] = new_fitness
+                        population[i] = solution
+
+        max_individual = max(index_fitness)
+        if max_individual > best_fitness:
+            best_fitness = max_individual
+            best_solution = population[index_fitness.index(max_individual)]
+            population[:]= [best_solution]*nPop     
         print(f"Iteration {iteration}: {best_fitness}")
     return best_solution, best_fitness
 

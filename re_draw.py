@@ -81,7 +81,7 @@ def plot_sensor(sensor_nodes, fitness):
     plt.savefig('graph.pdf', format='pdf', dpi=300)
     plt.show()
 
-with open('FOA.CSV', mode ='r', newline='') as file:
+with open('FOA_1.CSV', mode ='r', newline='') as file:
     csv_reader = csv.reader(file)
     csv_header = next(csv_reader)
     fitness = float(csv_header[0])
